@@ -85,7 +85,7 @@ export default class MeterService {
     return Math.floor(
       (meterComponentRef.current!.scrollLeft +
         meterComponentRef.current!.clientWidth / 2) /
-        elementWidth
+      elementWidth
     );
   };
 
@@ -100,7 +100,7 @@ export default class MeterService {
       ((earliestYearForNewLevel -
         Math.min(earliestYearForNewLevel, currentYear)) *
         newWidth) /
-        yearMultiplier -
+      yearMultiplier -
       screenWidth / 2
     );
   };
@@ -116,9 +116,9 @@ export default class MeterService {
     return (
       this.getEarliestYearForLevel(level) -
       currentIndex *
-        (level > 2
-          ? this.getYearMultiplier(level)
-          : 1 / this.getYearMultiplier(level))
+      (level > 2
+        ? this.getYearMultiplier(level)
+        : 1 / this.getYearMultiplier(level))
     );
   };
 
@@ -152,7 +152,6 @@ export default class MeterService {
     level: number,
     elementWidth: number
   ) => {
-    var calculatedOffset: number = 0;
     const yearMultiplier = this.getYearMultiplier(level);
 
     // Days
@@ -163,14 +162,10 @@ export default class MeterService {
     else if (level === 2) {
     }
     // 1, 10, 100, ...
-    else {
-      calculatedOffset =
-        (this.getEarliestYearForLevel(level) / yearMultiplier +
-          (date as number)) *
-        elementWidth;
-    }
+    return (this.getEarliestYearForLevel(level) / yearMultiplier +
+      (date as number)) *
+      elementWidth;
 
-    return calculatedOffset;
   };
 
   public static checkIfEventYearSpanInRange = (
