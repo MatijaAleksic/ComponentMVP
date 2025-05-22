@@ -61,15 +61,12 @@ export default class MeterService {
   };
 
   public static getRange = (
-    meterComponentRef: RefObject<HTMLDivElement | null>,
+    containerSize: number,
     dummyData: any[],
     scrollOffset: number,
     elementWidth: number
   ) => {
-    if (!meterComponentRef.current) {
-      return;
-    }
-    const containerSize = meterComponentRef.current.clientWidth;
+
     const startIndex = Math.floor(scrollOffset / elementWidth);
     const endIndex = Math.min(
       dummyData.length - 1,
@@ -79,12 +76,13 @@ export default class MeterService {
   };
 
   public static calculateCentralIndex = (
-    meterComponentRef: RefObject<HTMLDivElement | null>,
+    scrollLeft: number,
+    clientWidth: number,
     elementWidth: number
   ): number => {
     return Math.floor(
-      (meterComponentRef.current!.scrollLeft +
-        meterComponentRef.current!.clientWidth / 2) /
+      (scrollLeft +
+        clientWidth / 2) /
       elementWidth
     );
   };

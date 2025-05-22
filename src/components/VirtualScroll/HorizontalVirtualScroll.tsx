@@ -46,6 +46,10 @@ const HorizontalVirtualScroll = () => {
   useEffect(() => {
     screenWidthRef.current = screenWidth;
   }, [screenWidth]);
+  const rangeRef = useRef(range);
+  useEffect(() => {
+    rangeRef.current = range;
+  }, [range]);
 
   const levelRef = useRef(level);
   useEffect(() => {
@@ -89,9 +93,12 @@ const HorizontalVirtualScroll = () => {
   }, []);
   // On screen resize recalculate range and virtual items
   useLayoutEffect(() => {
+    if (!meterComponentRef.current) {
+      return;
+    }
     setRange(
       MeterService.getRange(
-        meterComponentRef,
+        meterComponentRef.current.clientWidth,
         levelElements,
         scrollOffset,
         elementWidth
@@ -109,21 +116,22 @@ const HorizontalVirtualScroll = () => {
     if (!meterComponentRef.current) return;
 
     const centralIndex = MeterService.calculateCentralIndex(
-      meterComponentRef,
+      meterComponentRef.current.scrollLeft,
+      meterComponentRef.current.clientWidth,
       elementWidthRef.current
     );
 
     // Skips updating virtual indexes when the element on center on the screen falls between the range
     if (
       !forceUpdate &&
-      range &&
-      centralIndex >= range.start &&
-      centralIndex <= range.end
+      rangeRef.current &&
+      centralIndex >= rangeRef.current.start &&
+      centralIndex <= rangeRef.current.end
     )
       return;
 
     const newRange = MeterService.getRange(
-      meterComponentRef,
+      meterComponentRef.current.clientWidth,
       levelElements,
       scrollOffset,
       elementWidth
@@ -376,6 +384,7 @@ const HorizontalVirtualScroll = () => {
   };
 
   console.log('level', level)
+  console.log('virtualIndexes', virtualIndexes);
 
   return (
     <div className={styles.meterWrapper}>
